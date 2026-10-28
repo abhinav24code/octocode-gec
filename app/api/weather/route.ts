@@ -26,6 +26,7 @@ const WeatherQuerySchema = z.object({
   lon: z.coerce.number().min(-180).max(180).optional(),
   days: z.coerce.number().min(1).max(14).default(7),
   listLocations: z.enum(["true", "false"]).optional(),
+  forceRefresh: z.enum(["true", "false"]).optional(),
 });
 
 export async function GET(request: NextRequest) {
@@ -38,6 +39,7 @@ export async function GET(request: NextRequest) {
     lon: searchParams.get("lon") || undefined,
     days: searchParams.get("days") || undefined,
     listLocations: searchParams.get("listLocations") || undefined,
+    forceRefresh: searchParams.get("forceRefresh") || undefined,
   };
 
   const parsed = WeatherQuerySchema.safeParse(rawParams);
@@ -65,7 +67,14 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const { location: locationQuery, lat, lon, days, listLocations } = parsed.data;
+  const {
+    location: locationQuery,
+    lat,
+    lon,
+    days,
+    listLocations,
+    forceRefresh,
+  } = parsed.data;
 
   // Convenience query for frontend to populate village dropdown
   if (listLocations === "true") {
@@ -96,6 +105,7 @@ export async function GET(request: NextRequest) {
     const forecast = await getForecastForLocation({
       location: targetLocation,
       days,
+      forceRefresh: forceRefresh === "true",
     });
 
     return NextResponse.json(

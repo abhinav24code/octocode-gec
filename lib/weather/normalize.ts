@@ -97,6 +97,8 @@ export function normalizeOpenMeteoForecast(
     ],
   };
 
+  const expiresAt = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+
   return {
     location,
     fetchedAt,
@@ -104,6 +106,9 @@ export function normalizeOpenMeteoForecast(
     source: "OPEN_METEO_INDIA",
     periods,
     dataQuality,
+    expiresAt,
+    nextUpdateDue: expiresAt,
+    isStale: false,
   };
 }
 
@@ -183,10 +188,13 @@ export function generateDeterministicForecast(
 
   const isMissing = scenario === "MISSING_DATA";
 
+  const nowIso = new Date().toISOString();
+  const expiresAt = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+
   return {
     location,
-    fetchedAt: new Date().toISOString(),
-    forecastIssuedAt: new Date().toISOString(),
+    fetchedAt: nowIso,
+    forecastIssuedAt: nowIso,
     source: "SIMULATED_DEMO",
     periods,
     dataQuality: {
@@ -198,5 +206,8 @@ export function generateDeterministicForecast(
         "Simulated for reliable demo testing without external internet dependencies",
       ],
     },
+    expiresAt,
+    nextUpdateDue: expiresAt,
+    isStale: false,
   };
 }

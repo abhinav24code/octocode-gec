@@ -65,4 +65,10 @@ export interface NormalizedWeatherForecast {
   periods: WeatherPeriod[];
   /** Data fidelity and completeness metadata */
   dataQuality: WeatherQuality;
+  /** ISO 8601 timestamp when this cached forecast expires (strictly 1 hour from fetch) */
+  expiresAt: string;
+  /** ISO 8601 timestamp indicating when the next hourly meteorological update is due */
+  nextUpdateDue: string;
+  /** Flag indicating whether the forecast has exceeded its 1-hour freshness window */
+  isStale?: boolean;
 }

@@ -16,8 +16,8 @@ interface CacheEntry {
   expiresAt: number;
 }
 
-// 15-minute in-memory cache (reduces external calls and prevents rate limits)
-const CACHE_TTL_MS = 15 * 60 * 1000;
+// 1-hour in-memory cache to guarantee meteorological freshness is updated hourly
+const CACHE_TTL_MS = 60 * 60 * 1000;
 const memoryCache = new Map<string, CacheEntry>();
 
 export interface FetchWeatherOptions {
@@ -73,7 +73,7 @@ export async function getForecastForLocation(
       headers: {
         Accept: "application/json",
       },
-      next: { revalidate: 900 }, // 15-minute Next.js fetch cache
+      next: { revalidate: 3600 }, // 1-hour hourly refresh cache
     });
 
     clearTimeout(timeoutId);

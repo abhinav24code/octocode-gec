@@ -8,6 +8,14 @@ import { WeatherLocation } from "@/types";
 
 export const CHHATTISGARH_LOCATIONS: WeatherLocation[] = [
   {
+    name: "Raipur (Sejbahar / GEC Farmlands)",
+    village: "Sejbahar",
+    district: "Raipur",
+    state: "Chhattisgarh",
+    latitude: 21.1626,
+    longitude: 81.659,
+  },
+  {
     name: "Raipur (Arang Agricultural Block)",
     village: "Arang",
     district: "Raipur",
